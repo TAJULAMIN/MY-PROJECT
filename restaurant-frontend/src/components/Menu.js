@@ -44,35 +44,103 @@ const IconWrapper = styled(IconButton)({
 });
 
 const sections = [
-    { title: 'Starters', items: ['Samosa ₹50', 'Spring Rolls ₹60', 'Hummus ₹80', 'Cheese Balls ₹90', 'Onion Rings ₹70', 'Stuffed Mushrooms ₹100', 'Vegetable Pakora ₹80'], icon: LocalDining },
-    { title: 'Main Course', items: ['Paneer Butter Masala ₹150', 'Dal Makhani ₹130', 'Vegetable Biryani ₹180', 'Vegetable Korma ₹140', 'Palak Paneer ₹160', 'Chana Masala ₹140', 'Aloo Gobi ₹130'], icon: Fastfood },
-    { title: 'Desserts', items: ['Gulab Jamun ₹80', 'Jalebi ₹70', 'Ras Malai ₹90', 'Kheer ₹75', 'Chocolate Mousse ₹100', 'Fruit Custard ₹85', 'Paneer Tikka ₹120'], icon: Cake },
-    { title: 'Beverages', items: ['Lassi ₹60', 'Mango Smoothie ₹70', 'Cold Coffee ₹80', 'Masala Chai ₹50', 'Green Tea ₹40', 'Buttermilk ₹55', 'Mint Lemonade ₹65'], icon: LocalBar },
-];
+    {
+      title: 'Starters',
+      icon: LocalDining,
+      items: [
+        { name: 'Samosa', price: '₹50', image: '/images/samosa.jpg' },
+        { name: 'Spring Rolls', price: '₹60', image: '/images/spring_rolls.jpg' },
+        { name: 'Hummus', price: '₹80', image: '/images/hummus.jpg' },
+        { name: 'Cheese Balls', price: '₹90', image: '/images/cheese_balls.jpg' },
+        { name: 'Onion Rings', price: '₹70', image: '/images/onion_rings.jpg' },
+        { name: 'Stuffed Mushrooms', price: '₹100', image: '/images/stuffed_mushrooms.jpg' },
+        { name: 'Vegetable Pakora', price: '₹80', image: '/images/vegetable_pakora.jpg' }
+      ]
+    },
+    {
+      title: 'Main Course',
+      icon: Fastfood,
+      items: [
+        { name: 'Paneer Butter Masala', price: '₹150', image: '/images/paneer_butter_masala.jpg' },
+        { name: 'Dal Makhani', price: '₹130', image: '/images/dal_makhani.jpg' },
+        { name: 'Vegetable Biryani', price: '₹180', image: '/images/vegetable_biryani.jpg' },
+        { name: 'Vegetable Korma', price: '₹140', image: '/images/vegetable_korma.jpg' },
+        { name: 'Palak Paneer', price: '₹160', image: '/images/palak_paneer.jpg' },
+        { name: 'Chana Masala', price: '₹140', image: '/images/chana_masala.jpg' },
+        { name: 'Aloo Gobi', price: '₹130', image: '/images/aloo_gobi.jpg' }
+      ]
+    },
+    {
+      title: 'Desserts',
+      icon: Cake,
+      items: [
+        { name: 'Gulab Jamun', price: '₹80', image: '/images/gulab_jamun.jpg' },
+        { name: 'Jalebi', price: '₹70', image: '/images/jalebi.jpg' },
+        { name: 'Ras Malai', price: '₹90', image: '/images/ras_malai.jpg' },
+        { name: 'Kheer', price: '₹75', image: '/images/kheer.jpg' },
+        { name: 'Chocolate Mousse', price: '₹100', image: '/images/chocolate_mousse.jpg' },
+        { name: 'Fruit Custard', price: '₹85', image: '/images/fruit_custard.jpg' },
+        { name: 'Paneer Tikka', price: '₹120', image: '/images/paneer_tikka.jpg' }
+      ]
+    },
+    {
+      title: 'Beverages',
+      icon: LocalBar,
+      items: [
+        { name: 'Lassi', price: '₹60', image: '/images/lassi.jpg' },
+        { name: 'Mango Smoothie', price: '₹70', image: '/images/mango_smoothie.jpg' },
+        { name: 'Cold Coffee', price: '₹80', image: '/images/cold_coffee.jpg' },
+        { name: 'Masala Chai', price: '₹50', image: '/images/masala_chai.jpg' },
+        { name: 'Green Tea', price: '₹40', image: '/images/green_tea.jpg' },
+        { name: 'Buttermilk', price: '₹55', image: '/images/buttermilk.jpg' },
+        { name: 'Mint Lemonade', price: '₹65', image: '/images/mint_lemonade.jpg' }
+      ]
+    }
+  ];
+  
 
-const MenuPage = () => (
+  const MenuPage = () => (
     <StyledContainer>
-        {sections.map(({ title, items, icon: Icon }, idx) => (
-            <div key={idx}>
-                <SectionTitle>{title}</SectionTitle>
-                <Grid container spacing={2}>
-                    {items.map((item, index) => (
-                        <Grid item xs={12} sm={6} md={3} key={index}>
-                            <MenuColumn>
-                                <IconWrapper>
-                                    <Icon />
-                                </IconWrapper>
-                                <Typography variant="h6">{item.split(' ')[0]}</Typography>
-                                <Typography variant="body1" color="textSecondary">
-                                    {item.split(' ')[1]}
-                                </Typography>
-                            </MenuColumn>
-                        </Grid>
-                    ))}
-                </Grid>
-            </div>
-        ))}
+      {sections.map(({ title, items, icon: Icon }, idx) => (
+        <div key={idx}>
+          <SectionTitle>{title}</SectionTitle>
+          <Grid container spacing={2}>
+            {items.map((item, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <MenuColumn>
+                  {/* Image */}
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    style={{
+                      width: '100%',
+                      height: '150px',
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                      marginBottom: '8px',
+                    }}
+                  />
+  
+                  {/* Icon */}
+                  <IconWrapper>
+                    <Icon />
+                  </IconWrapper>
+  
+                  {/* Name */}
+                  <Typography variant="h6">{item.name}</Typography>
+  
+                  {/* Price */}
+                  <Typography variant="body1" color="textSecondary">
+                    {item.price}
+                  </Typography>
+                </MenuColumn>
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+      ))}
     </StyledContainer>
-);
+  );
+  
 
 export default MenuPage;
