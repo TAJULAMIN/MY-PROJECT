@@ -59,7 +59,9 @@ const Header = () => {
                     <Typography variant="h6" sx={{ flexGrow: 1, color: '#f56d18', fontSize: '20px', fontWeight: 700, fontStyle: 'italic' }}>
                         TASTY FOOD
                     </Typography>
+                    <StyledLink to="/">Home</StyledLink>
                     <StyledLink to="/menu">Menu</StyledLink>
+                    <StyledLink to="/book-table">Book Now</StyledLink>
                     <StyledLink to="/contact">Contact</StyledLink>
                     <IconButton edge="end" color="inherit" onClick={handleDrawerToggle}>
                         <MenuIcon />
