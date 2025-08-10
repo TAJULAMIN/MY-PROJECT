@@ -38,10 +38,12 @@ const StyledLink = styled(Link)(({ theme }) => ({
     textDecoration: 'none',
     fontSize: '18px',
     padding: theme.spacing(1),
+    marginLeft: theme.spacing(4), 
     borderRadius: theme.shape.borderRadius,
     '&:hover': {
         backgroundColor: '#FFEB3B',
         color: '#222',
+         transform: 'scaleY(0.9)'
     },
 }));
 
