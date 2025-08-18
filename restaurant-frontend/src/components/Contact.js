@@ -129,7 +129,7 @@ const Contact = () => {
                                     <MailOutlineIcon fontSize="inherit" />
                                 </IconWrapper>
                                 <Box sx={{ flex: 1 }}>
-                                    <ContactText variant="body1">Email: info@restaurant.com</ContactText>
+                                    <ContactText variant="body1">Email:TF@gmail.com</ContactText>
                                 </Box>
                             </ContactItem>
                         </Grid>
@@ -139,7 +139,7 @@ const Contact = () => {
                                     <PhoneIcon fontSize="inherit" />
                                 </IconWrapper>
                                 <Box sx={{ flex: 1 }}>
-                                    <ContactText variant="body1">Phone: +123 456 7890</ContactText>
+                                    <ContactText variant="body1">Phone: +92 340974661</ContactText>
                                 </Box>
                             </ContactItem>
                         </Grid>
@@ -149,7 +149,7 @@ const Contact = () => {
                                     <LocationOnIcon fontSize="inherit" />
                                 </IconWrapper>
                                 <Box sx={{ flex: 1 }}>
-                                    <ContactText variant="body1">Address: 123 Food Street, Flavor Town</ContactText>
+                                    <ContactText variant="body1">Address: Government Post Graduate College, <br></br> Swabi, Khyber Pakhtunkhwa, Pakistan</ContactText>
                                 </Box>
                             </ContactItem>
                         </Grid>
@@ -175,15 +175,17 @@ const Contact = () => {
                         Find Us Here
                     </Typography>
                     <Box sx={{ height: '400px', width: '100%' }}>
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2425.182071786431!2d-73.98450098435642!3d40.7587387793261!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258f5486351d7%3A0x8043e2a20f2a6c8!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1618945368457!5m2!1sen!2sus"
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0 }}
-                            allowFullScreen
-                            loading="lazy"
-                            title="Google Maps embed of Times Square"
-                        ></iframe>
+                    <iframe 
+             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3301.4064814686553!2d72.40956017455665!3d34.16152371195399!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dee93a1c864b75%3A0xa5190535b0b2f198!2sGovernment%20Post%20Graduate%20College%20Swabi!5e0!3m2!1sen!2s!4v1755335222524!5m2!1sen!2s" 
+             width="100%" 
+             height="450" 
+             style={{ border: 0 }}
+             allowfullscreen="" 
+             loading="lazy" 
+             referrerpolicy="no-referrer-when-downgrade"
+             title="Google Maps embed of Government Post Graduate College Swabi">
+                   </iframe>
+
                     </Box>
                 </SectionContainer>
             </FlexContainer>

@@ -65,6 +65,8 @@ const Header = () => {
                     <StyledLink to="/menu">Menu</StyledLink>
                     <StyledLink to="/book-table">Book Now</StyledLink>
                     <StyledLink to="/contact">Contact</StyledLink>
+                    <StyledLink to="/signin">Sign In</StyledLink>
+                    <StyledLink to="/signup">Sign Up</StyledLink>
                     <IconButton edge="end" color="inherit" onClick={handleDrawerToggle}>
                         <MenuIcon />
                     </IconButton>
