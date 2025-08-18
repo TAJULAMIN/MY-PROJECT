@@ -57,7 +57,7 @@ export default function SignIn() {
       localStorage.setItem("token", res.data.token);
 
       alert("Login Successful 🎉");
-      navigate("/Home"); // redirect after login
+      navigate("/"); // redirect after login
     } catch (err) {
       alert(err.response?.data?.msg || "Login failed");
     }
