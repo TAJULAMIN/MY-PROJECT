@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Typography, Paper, IconButton, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { sections } from '../Data/MenuData';  // 👈 import data
+import { sections } from '../Data/MenuData';
 
 const StyledContainer = styled(Container)({
     padding: '32px',
