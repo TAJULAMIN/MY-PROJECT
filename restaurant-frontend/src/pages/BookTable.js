@@ -78,6 +78,9 @@ export default function BookTable() {
         case 'date':
           newErrors.date = value >= new Date().toISOString().split('T')[0] ? '' : 'Date cannot be in the past.';
           break;
+        case 'time':
+          newErrors.time = value ? '' : 'Time is required.';
+          break;
         case 'guests':
           newErrors.guests = (value >= 1 && value <= 20) ? '' : 'Guests should be between 1 and 20.';
           break;
@@ -87,6 +90,7 @@ export default function BookTable() {
         default:
           break;
       }
+
       return newErrors;
     });
   };
@@ -94,12 +98,24 @@ export default function BookTable() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate all fields before submit
+    // Validate all fields
     const validationErrors = {
-      name: formData.name ? (formData.name.length > 50 ? 'Name should not exceed 50 characters.' : '') : 'Name is required.',
-      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) ? '' : 'Invalid email address.',
-      date: formData.date >= new Date().toISOString().split('T')[0] ? '' : 'Date cannot be in the past.',
-      guests: (formData.guests >= 1 && formData.guests <= 20) ? '' : 'Guests should be between 1 and 20.',
+      name: formData.name
+        ? formData.name.length > 50
+          ? 'Name should not exceed 50 characters.'
+          : ''
+        : 'Name is required.',
+      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+        ? ''
+        : 'Invalid email address.',
+      date: formData.date >= new Date().toISOString().split('T')[0]
+        ? ''
+        : 'Date cannot be in the past.',
+      time: formData.time ? '' : 'Time is required.',
+      guests:
+        formData.guests >= 1 && formData.guests <= 20
+          ? ''
+          : 'Guests should be between 1 and 20.',
       branch: formData.branch ? '' : 'Please select a branch.',
     };
 
@@ -109,12 +125,26 @@ export default function BookTable() {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/book-table', formData);
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        date: new Date(formData.date), // convert to Date object
+        time: formData.time,
+        guests: Number(formData.guests), // convert to number
+        branch: formData.branch,
+      };
+
+      const response = await axios.post('http://localhost:5000/api/book-table', payload);
+
       toast.success('Table booked successfully!');
       setFormData({ name: '', email: '', date: '', time: '', guests: '', branch: '' });
+      setErrors({});
+      console.log('Booking response:', response.data);
     } catch (error) {
-      console.error('Error booking the table:', error);
-      toast.error('Error booking the table. Please try again.');
+      console.error('Error booking the table:', error.response || error);
+      toast.error(
+        error.response?.data?.error || 'Error booking the table. Please try again.'
+      );
     }
   };
 
@@ -143,6 +173,7 @@ export default function BookTable() {
                 />
               </Grid>
             ))}
+
             {['date', 'time', 'guests'].map((field) => (
               <Grid item xs={12} sm={field === 'date' || field === 'time' ? 6 : 12} key={field}>
                 <TextField
@@ -161,6 +192,7 @@ export default function BookTable() {
                 />
               </Grid>
             ))}
+
             {/* Branch Dropdown */}
             <Grid item xs={12}>
               <TextField
@@ -180,6 +212,7 @@ export default function BookTable() {
               </TextField>
             </Grid>
           </Grid>
+
           <ButtonContainer>
             <Button
               type="submit"
