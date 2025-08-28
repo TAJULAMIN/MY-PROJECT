@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemText, IconButton, Typography, AppBar, Toolbar } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, IconButton, Typography, AppBar, Toolbar, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
@@ -8,7 +8,9 @@ import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import BookIcon from '@mui/icons-material/Book';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import logo from '../assets/logo.jpg';
+import { useAuth } from "../Context/AuthContext";  // ✅ use global auth
 
+// --- styled components (same as before) ---
 const StyledDrawer = styled(Drawer)(({ theme }) => ({
     width: 240,
     '& .MuiDrawer-paper': {
@@ -43,16 +45,34 @@ const StyledLink = styled(Link)(({ theme }) => ({
     '&:hover': {
         backgroundColor: '#FFEB3B',
         color: '#222',
-         transform: 'scaleY(0.9)'
+        transform: 'scaleY(0.9)'
     },
 }));
+     const StyledButton = styled(Button)(({ theme }) => ({
+    color: "#FFA500",
+    textTransform: "none",
+    fontSize: "18px",
+    padding: theme.spacing(1),
+    marginLeft: theme.spacing(4),
+    borderRadius: theme.shape.borderRadius,
+    "&:hover": {
+      backgroundColor: "#FFEB3B",
+      color: "#222",
+      transform: "scaleY(0.9)",
+    },
+  }));
+  
 
 const Header = () => {
-    const [open, setOpen] = useState(false); // State to toggle the drawer
-    const handleDrawerToggle = () => setOpen(!open); // Toggle drawer open/close
+    const [open, setOpen] = useState(false); 
+    const { isAuthenticated, logout } = useAuth(); // ✅ comes from context
+   
+
+
+    const handleDrawerToggle = () => setOpen(!open);
+
     return (
         <>
-            {/* AppBar with logo, title, and links */}
             <AppBar position="static" sx={{ background: 'linear-gradient(45deg, #0D0D0D, #333)', height: 64 }}>
                 <Toolbar>
                     <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
@@ -61,22 +81,36 @@ const Header = () => {
                     <Typography variant="h6" sx={{ flexGrow: 1, color: '#f56d18', fontSize: '20px', fontWeight: 700, fontStyle: 'italic' }}>
                         TASTY FOOD
                     </Typography>
+
+                    {/* Always visible */}
                     <StyledLink to="/">Home</StyledLink>
                     <StyledLink to="/menu">Menu</StyledLink>
                     <StyledLink to="/book-table">Book Now</StyledLink>
                     <StyledLink to="/contact">Contact</StyledLink>
-                    <StyledLink to="/signin">Sign In</StyledLink>
-                    <StyledLink to="/signup">Sign Up</StyledLink>
+
+                    {/* Conditional Auth links */}
+                    {!isAuthenticated ? (
+                        <>
+                            <StyledLink to="/signin">Sign In</StyledLink>
+                            <StyledLink to="/signup">Sign Up</StyledLink>
+                        </>
+                    ) : (
+                       
+                        // usage in your Header
+                        <StyledButton onClick={logout}>
+                        Logout
+                      </StyledButton>
+                    )}
+
                     <IconButton edge="end" color="inherit" onClick={handleDrawerToggle}>
                         <MenuIcon />
                     </IconButton>
                 </Toolbar>
             </AppBar>
 
-            {/* Side Drawer for mobile menu */}
+            {/* Drawer */}
             <StyledDrawer anchor="right" open={open} onClose={handleDrawerToggle}>
                 <List>
-                    {/* Drawer menu items */}
                     {[
                         { text: 'Home', icon: <HomeIcon />, path: '/' },
                         { text: 'Menu', icon: <RestaurantMenuIcon />, path: '/menu' },

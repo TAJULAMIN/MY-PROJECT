@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import { keyframes } from "@emotion/react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../Context/AuthContext";  // ✅ use global auth
 
 // Slide-in animation
 const slideIn = keyframes`
@@ -43,6 +44,7 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth(); // ✅ get login function from AuthContext
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,8 +55,11 @@ export default function SignIn() {
         password,
       });
 
-      // Save JWT token in localStorage
+      // Save JWT token
       localStorage.setItem("token", res.data.token);
+
+      // ✅ Update global auth state
+      login();
 
       alert("Login Successful 🎉");
       navigate("/"); // redirect after login
