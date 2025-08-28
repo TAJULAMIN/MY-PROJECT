@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Box, TextField, Button, Grid } from '@mui/material';
+import { Typography, Box, TextField, Button, Grid, MenuItem } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { keyframes } from '@emotion/react';
@@ -7,13 +7,13 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// Keyframes for the slide-in animation
+// Animation
 const slideIn = keyframes`
   from { transform: translateX(-100%); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
 `;
 
-// Styled components
+// Background
 const BackgroundBox = styled(Box)(({ theme }) => ({
   backgroundImage: `url(${require('../assets/book1.jpg')})`,
   backgroundSize: 'cover',
@@ -29,6 +29,7 @@ const BackgroundBox = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
 }));
 
+// Form container
 const FormContainer = styled(Box)(({ theme }) => ({
   backgroundColor: 'rgba(255, 255, 255, 0.9)',
   borderRadius: theme.shape.borderRadius * 2,
@@ -54,8 +55,8 @@ export default function BookTable() {
     date: '',
     time: '',
     guests: '',
+    branch: '',
   });
-
   const [errors, setErrors] = useState({});
 
   const handleChange = ({ target: { name, value } }) => {
@@ -80,6 +81,9 @@ export default function BookTable() {
         case 'guests':
           newErrors.guests = (value >= 1 && value <= 20) ? '' : 'Guests should be between 1 and 20.';
           break;
+        case 'branch':
+          newErrors.branch = value ? '' : 'Please select a branch.';
+          break;
         default:
           break;
       }
@@ -90,11 +94,13 @@ export default function BookTable() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate all fields before submit
     const validationErrors = {
       name: formData.name ? (formData.name.length > 50 ? 'Name should not exceed 50 characters.' : '') : 'Name is required.',
       email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) ? '' : 'Invalid email address.',
       date: formData.date >= new Date().toISOString().split('T')[0] ? '' : 'Date cannot be in the past.',
       guests: (formData.guests >= 1 && formData.guests <= 20) ? '' : 'Guests should be between 1 and 20.',
+      branch: formData.branch ? '' : 'Please select a branch.',
     };
 
     if (Object.values(validationErrors).some((error) => error)) {
@@ -105,7 +111,7 @@ export default function BookTable() {
     try {
       await axios.post('http://localhost:5000/api/book-table', formData);
       toast.success('Table booked successfully!');
-      setFormData({ name: '', email: '', date: '', time: '', guests: '' });
+      setFormData({ name: '', email: '', date: '', time: '', guests: '', branch: '' });
     } catch (error) {
       console.error('Error booking the table:', error);
       toast.error('Error booking the table. Please try again.');
@@ -155,12 +161,29 @@ export default function BookTable() {
                 />
               </Grid>
             ))}
+            {/* Branch Dropdown */}
+            <Grid item xs={12}>
+              <TextField
+                select
+                required
+                fullWidth
+                label="Select Branch"
+                name="branch"
+                value={formData.branch}
+                onChange={handleChange}
+                error={!!errors.branch}
+                helperText={errors.branch}
+              >
+                <MenuItem value="Swabi">Swabi</MenuItem>
+                <MenuItem value="Karachi">Karachi</MenuItem>
+                <MenuItem value="Lahore">Lahore</MenuItem>
+              </TextField>
+            </Grid>
           </Grid>
           <ButtonContainer>
             <Button
               type="submit"
               variant="contained"
-              color="secondary"
               sx={{ width: '48%', backgroundColor: '#FF5722', color: 'white', '&:hover': { backgroundColor: '#E64A19' } }}
             >
               Book Now
@@ -169,7 +192,6 @@ export default function BookTable() {
               component={Link}
               to="/"
               variant="outlined"
-              color="primary"
               sx={{ width: '48%', color: '#FF5722', borderColor: '#FF5722', '&:hover': { borderColor: '#E64A19', color: '#E64A19' } }}
             >
               Back to Home

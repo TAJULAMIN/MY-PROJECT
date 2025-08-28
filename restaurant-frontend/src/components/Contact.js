@@ -114,47 +114,114 @@ const SocialMediaItem = styled(Button)(({ theme }) => ({
     },
 }));
 
+// 🔹 Multiple Branches Data
+const branches = [
+    {
+        name: "Swabi Branch",
+        email: "swabi@tf.com",
+        phone: "+92 340 974661",
+        address: "Government Post Graduate College, Swabi, Khyber Pakhtunkhwa, Pakistan",
+        map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1925.593631582167!2d72.41209347914982!3d34.16151039730057!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38deef747aaa83bb%3A0x2b89195da1793f3b!2sSwabi!5e0!3m2!1sen!2s!4v1756354617472!5m2!1sen!2s"
+    },
+    {
+        name: "Lahore Branch",
+        email: "lahore@tf.com",
+        phone: "+92 300 1234567",
+        address: "123 Main Road, Lahore, Pakistan",
+        map: "https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d217891.51776200646!2d74.18435908554275!3d31.426385403972287!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e6!4m0!4m5!1s0x3919005d76ecd1eb%3A0xc91fffa2f0e2b193!2sLahori%20Restaurant%2C%2010%20H1%2C%20Commercial%20Valencia%2C%20Lahore%2C%2054800%2C%20Pakistan!3m2!1d31.3971704!2d74.2559371!5e0!3m2!1sen!2s!4v1756354768781!5m2!1sen!2s"
+    },
+    {
+        name: "Karachi Branch",
+        email: "karachi@tf.com",
+        phone: "+92 321 7654321",
+        address: "45 Clifton Block, Karachi, Pakistan",
+        map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3710083.3524255888!2d62.21713121250001!3d24.7567907!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33d16c60976e3%3A0xc9989c97ba48c2da!2sKolachi%20Restaurant!5e0!3m2!1sen!2s!4v1756354997978!5m2!1sen!2s"
+    }
+];
+
+
 const Contact = () => {
     return (
         <GlobalStyle>
             <FlexContainer>
                 <SectionContainer>
-                    <Typography variant="h3" gutterBottom style={{ fontWeight: 'bold', fontSize: '2rem', borderBottom: `2px solid ${accentColor}`, paddingBottom: '1rem' }}>
-                        Get in Touch
+                    <Typography
+                        variant="h3"
+                        gutterBottom
+                        style={{
+                            fontWeight: 'bold',
+                            fontSize: '2rem',
+                            borderBottom: `2px solid ${accentColor}`,
+                            paddingBottom: '1rem'
+                        }}
+                    >
+                        Our Branches
                     </Typography>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <ContactItem>
-                                <IconWrapper>
-                                    <MailOutlineIcon fontSize="inherit" />
-                                </IconWrapper>
-                                <Box sx={{ flex: 1 }}>
-                                    <ContactText variant="body1">Email:TF@gmail.com</ContactText>
-                                </Box>
-                            </ContactItem>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <ContactItem>
-                                <IconWrapper>
-                                    <PhoneIcon fontSize="inherit" />
-                                </IconWrapper>
-                                <Box sx={{ flex: 1 }}>
-                                    <ContactText variant="body1">Phone: +92 340974661</ContactText>
-                                </Box>
-                            </ContactItem>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <ContactItem>
-                                <IconWrapper>
-                                    <LocationOnIcon fontSize="inherit" />
-                                </IconWrapper>
-                                <Box sx={{ flex: 1 }}>
-                                    <ContactText variant="body1">Address: Government Post Graduate College, <br></br> Swabi, Khyber Pakhtunkhwa, Pakistan</ContactText>
-                                </Box>
-                            </ContactItem>
-                        </Grid>
-                    </Grid>
-                    <Typography variant="h4" gutterBottom style={{ fontWeight: 'bold', fontSize: '1.5rem', marginTop: '2rem', borderBottom: `2px solid ${secondaryColor}`, paddingBottom: '1rem' }}>
+
+                    {branches.map((branch, idx) => (
+                        <Box key={idx} sx={{ mb: 5 }}>
+                            <Typography
+                                variant="h5"
+                                gutterBottom
+                                sx={{ fontWeight: "bold", color: secondaryColor }}
+                            >
+                                {branch.name}
+                            </Typography>
+
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <ContactItem>
+                                        <IconWrapper>
+                                            <MailOutlineIcon fontSize="inherit" />
+                                        </IconWrapper>
+                                        <ContactText>Email: {branch.email}</ContactText>
+                                    </ContactItem>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <ContactItem>
+                                        <IconWrapper>
+                                            <PhoneIcon fontSize="inherit" />
+                                        </IconWrapper>
+                                        <ContactText>Phone: {branch.phone}</ContactText>
+                                    </ContactItem>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <ContactItem>
+                                        <IconWrapper>
+                                            <LocationOnIcon fontSize="inherit" />
+                                        </IconWrapper>
+                                        <ContactText>{branch.address}</ContactText>
+                                    </ContactItem>
+                                </Grid>
+                            </Grid>
+
+                            {/* Map for each branch */}
+                            <Box sx={{ height: "300px", width: "100%", mt: 2 }}>
+                                <iframe
+                                    src={branch.map}
+                                    width="100%"
+                                    height="300"
+                                    style={{ border: 0 }}
+                                    allowFullScreen=""
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    title={branch.name}
+                                ></iframe>
+                            </Box>
+                        </Box>
+                    ))}
+
+                    <Typography
+                        variant="h4"
+                        gutterBottom
+                        style={{
+                            fontWeight: 'bold',
+                            fontSize: '1.5rem',
+                            marginTop: '2rem',
+                            borderBottom: `2px solid ${secondaryColor}`,
+                            paddingBottom: '1rem'
+                        }}
+                    >
                         Follow Us
                     </Typography>
                     <Grid container spacing={1}>
@@ -168,25 +235,6 @@ const Contact = () => {
                             <SocialMediaItem startIcon={<TwitterIcon />}>Twitter</SocialMediaItem>
                         </Grid>
                     </Grid>
-                </SectionContainer>
-
-                <SectionContainer>
-                    <Typography variant="h3" gutterBottom style={{ fontWeight: 'bold', fontSize: '2rem', borderBottom: `2px solid ${accentColor}`, paddingBottom: '1rem' }}>
-                        Find Us Here
-                    </Typography>
-                    <Box sx={{ height: '400px', width: '100%' }}>
-                    <iframe 
-             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3301.4064814686553!2d72.40956017455665!3d34.16152371195399!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dee93a1c864b75%3A0xa5190535b0b2f198!2sGovernment%20Post%20Graduate%20College%20Swabi!5e0!3m2!1sen!2s!4v1755335222524!5m2!1sen!2s" 
-             width="100%" 
-             height="450" 
-             style={{ border: 0 }}
-             allowfullscreen="" 
-             loading="lazy" 
-             referrerpolicy="no-referrer-when-downgrade"
-             title="Google Maps embed of Government Post Graduate College Swabi">
-                   </iframe>
-
-                    </Box>
                 </SectionContainer>
             </FlexContainer>
         </GlobalStyle>
