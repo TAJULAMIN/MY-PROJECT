@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const handleEdit = (booking) => {
+  // Save booking in localStorage (so Edit page can use it)
+  localStorage.setItem("editBooking", JSON.stringify(booking));
+
+  // Redirect to edit page
+  window.location.href = `/edit-booking/${booking._id}`;
+};
+
+
 function TableBookingList() {   // 👉 pass the logged-in user here
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,6 +39,7 @@ function TableBookingList() {   // 👉 pass the logged-in user here
       setLoading(false);
     }
   }, [user]);
+  
 
   if (loading) return <p>Loading bookings...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;   // 👉 show error if not admin
@@ -68,6 +78,15 @@ function TableBookingList() {   // 👉 pass the logged-in user here
                 <td>{booking.guests}</td>
                 <td>{booking.branch}</td>
                 <td>{new Date(booking.createdAt).toLocaleString()}</td>
+                <td>
+        {/* ✅ Edit button */}
+        <button 
+          onClick={() => handleEdit(booking)} 
+          style={{ backgroundColor: "#FFA500", padding: "5px 10px", borderRadius: "5px", cursor: "pointer" }}
+        >
+          Edit
+        </button>
+      </td>
               </tr>
             ))}
           </tbody>

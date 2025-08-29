@@ -9,6 +9,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import { AuthProvider } from "./Context/AuthContext"; 
 import TableBookingList from './Data/TableBookingList';
+import EditBooking from "./pages/EditBooking";
 const App = () => {
     return (
         <AuthProvider>
@@ -23,6 +24,8 @@ const App = () => {
                 <Route path="/SignIn" element={<SignIn />} />
                 <Route path="/SignUp" element={<SignUp />} />
                 <Route path="/my-bookings" element={<TableBookingList />} />
+                <Route path="/edit-booking/:id" element={<EditBooking />} />
+                
                 
         </Routes>
       </Router>

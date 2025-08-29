@@ -2,6 +2,7 @@ const TableBooking = require('./models/TableBooking');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const router = express.Router();
 require('dotenv').config();
 
 const app = express();
@@ -32,6 +33,37 @@ app.get("/api/bookings", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch bookings" });
   }
 });
+
+// Route for single booking
+app.get("/api/bookings/:id", async (req, res) => {
+  try {
+    const booking = await TableBooking.findById(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ error: "Booking not found" });
+    }
+    res.json(booking);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch booking" });
+  }
+});
+
+/// ✅ Update a booking by ID
+app.put("/api/bookings/:id", async (req, res) => {
+  try {
+    const booking = await TableBooking.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+    res.json(booking);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update booking" });
+  }
+});
+
 
 
 

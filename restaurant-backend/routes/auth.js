@@ -5,6 +5,10 @@ const User = require("../models/User");
 
 const router = express.Router();
 
+
+
+
+
 // Sign Up
 router.post("/signup", async (req, res) => {
   try {
