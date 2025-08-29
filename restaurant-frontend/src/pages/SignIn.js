@@ -46,6 +46,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   const { login } = useAuth(); // ✅ get login function from AuthContext
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -54,6 +55,8 @@ export default function SignIn() {
         email,
         password,
       });
+        // ✅ Save logged in user in localStorage
+        localStorage.setItem("user", JSON.stringify(res.data.user));
 
       // Save JWT token
       localStorage.setItem("token", res.data.token);

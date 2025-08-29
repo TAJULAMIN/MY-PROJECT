@@ -1,24 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function TableBookingList() {
+function TableBookingList() {   // 👉 pass the logged-in user here
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");   // 👉 new state for errors
+
+    // ✅ get logged in user from localStorage
+    const storedUser = localStorage.getItem("user");
+    const user = storedUser ? JSON.parse(storedUser) : null;
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/bookings') // call backend API
-      .then(res => {
-        setBookings(res.data);
-        console.log(res.data)
-        setLoading(false);
-      })
-      .catch(err => {
-        console.log(err);
-        setLoading(false);
-      });
-  }, []);
+    
+    // 👉 Check if this user is the admin
+    if (user?.email === "admin@gmail.com") {
+      axios.get('http://localhost:5000/api/bookings')
+        .then(res => {
+          setBookings(res.data);
+          
+          setLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+          setError("Failed to load bookings");
+          setLoading(false);
+        });
+    } else {
+      setError("You are not allowed to view bookings");
+      setLoading(false);
+    }
+  }, [user]);
 
   if (loading) return <p>Loading bookings...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;   // 👉 show error if not admin
 
   return (
     <div style={{
