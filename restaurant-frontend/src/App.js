@@ -14,7 +14,7 @@ const App = () => {
         <AuthProvider>
       <Router>
         <Header />
-        <TableBookingList />
+        
         <Routes>
         <Route path="/" element={<Home />} />
                 <Route path="/menu" element={<Menu />} />
@@ -22,8 +22,11 @@ const App = () => {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/SignIn" element={<SignIn />} />
                 <Route path="/SignUp" element={<SignUp />} />
+                <Route path="/my-bookings" element={<TableBookingList />} />
+                
         </Routes>
       </Router>
+
     </AuthProvider>
     );
 };

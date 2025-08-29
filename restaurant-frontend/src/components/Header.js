@@ -95,11 +95,17 @@ const Header = () => {
                             <StyledLink to="/signup">Sign Up</StyledLink>
                         </>
                     ) : (
+                         <>
                        
-                        // usage in your Header
+                        
+                        <StyledButton component={Link} to="/my-bookings">
+                        My Bookings
+                      </StyledButton>
                         <StyledButton onClick={logout}>
                         Logout
                       </StyledButton>
+                      </>
+                      
                     )}
 
                     <IconButton edge="end" color="inherit" onClick={handleDrawerToggle}>
