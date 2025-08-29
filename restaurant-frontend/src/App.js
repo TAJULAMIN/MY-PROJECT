@@ -8,12 +8,13 @@ import BookTable from './pages/BookTable';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import { AuthProvider } from "./Context/AuthContext"; 
-
+import TableBookingList from './Data/TableBookingList';
 const App = () => {
     return (
         <AuthProvider>
       <Router>
         <Header />
+        <TableBookingList />
         <Routes>
         <Route path="/" element={<Home />} />
                 <Route path="/menu" element={<Menu />} />

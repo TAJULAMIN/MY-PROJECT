@@ -1,3 +1,4 @@
+const TableBooking = require('./models/TableBooking');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -12,10 +13,25 @@ app.use(express.json());
 
 // Routes
 const bookTableRoutes = require('./routes/bookTable');
-
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
+// Fetch data
+async function fetchBookings() {
+  const bookings = await TableBooking.find();
+  console.log(bookings);
+}
+fetchBookings();
+
+// Route for Booking list
+app.get("/api/bookings", async (req, res) => {
+  try {
+    const bookings = await TableBooking.find();
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch bookings" });
+  }
+});
 
 
 
