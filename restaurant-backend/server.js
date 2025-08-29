@@ -19,7 +19,7 @@ app.use("/api/auth", authRoutes);
 // Fetch data
 async function fetchBookings() {
   const bookings = await TableBooking.find();
-  console.log(bookings);
+  // console.log(bookings);
 }
 fetchBookings();
 
