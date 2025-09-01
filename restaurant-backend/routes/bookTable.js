@@ -24,32 +24,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// backend/routes/reservations.js
-router.get("/reservations", async (req, res) => {
-  const userEmail = req.query.email; // client sends ?email=user@gmail.com
-
-  try {
-    if (!userEmail) {
-      return res.status(400).json({ message: "Email is required" });
-    }
-
-    let reservations;
-
-    if (userEmail === "admin@gmail.com") {
-      // ✅ Admin can see ALL reservations
-      reservations = await Reservation.find();
-    } else {
-      // ✅ Normal user can only see THEIR reservations
-      reservations = await Reservation.find({ email: userEmail });
-    }
-
-    res.json(reservations);
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-
 // GET reservations for a user
 router.get('/:userId', async (req, res) => {
   try {
