@@ -1,41 +1,67 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const TableBooking = require('../models/TableBooking');
+const TableBooking = require("../models/TableBooking");
+
+/**
+ * =========================
+ * USER ROUTES
+ * =========================
+ */
+
+
 
 // POST - Book a table
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    // Log incoming request body
-    console.log('Incoming booking data:', req.body);
+    console.log("Incoming booking data:", req.body);
 
-    // Create a new booking
     const newBooking = new TableBooking(req.body);
-
-    // Save to DB
     const savedBooking = await newBooking.save();
 
-    console.log('Booking saved successfully:', savedBooking);
-    res.status(201).json({ message: 'Table booked!', booking: savedBooking });
+    console.log("Booking saved successfully:", savedBooking);
+    res.status(201).json({ message: "Table booked!", booking: savedBooking });
   } catch (err) {
-    console.error('Error saving booking:', err);
-
-    // Send detailed error
+    console.error("Error saving booking:", err);
     res.status(400).json({ error: err.message, details: err.errors });
   }
 });
 
-// GET reservations for a user
-router.get('/:userId', async (req, res) => {
+// GET - Fetch reservations for a specific user
+router.get("/user/:userId", async (req, res) => {
   try {
     const reservations = await TableBooking.find({ userId: req.params.userId });
+
     if (reservations.length > 0) {
       res.json({ reservationExists: true, reservations });
     } else {
       res.json({ reservationExists: false, reservations: [] });
     }
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
+    console.error("Error fetching user reservations:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+/**
+ * =========================
+ * ADMIN ROUTES
+ * =========================
+ */
+
+// GET - Fetch all reservations (Admin only)
+router.get("/admin/reservations", async (req, res) => {
+  const userEmail = req.query.email; // ?email=admin@gmail.com
+
+  if (userEmail !== "admin@gmail.com") {
+    return res.status(403).json({ message: "Access denied" });
+  }
+
+  try {
+    const reservations = await TableBooking.find();
+    res.json(reservations);
+  } catch (err) {
+    console.error("Error fetching all reservations:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
