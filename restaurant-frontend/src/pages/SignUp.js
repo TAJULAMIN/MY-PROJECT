@@ -47,33 +47,37 @@ export default function SignUp() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    if (password !== confirmPassword) {
-      alert("Passwords do not match ❌");
-      return;
-    }
-  
-    try {
-      // 👇 Call backend API (no need for res since we don’t use it)
-      await axios.post("http://localhost:5000/api/auth/signup", {
-        username: name,
-        email,
-        password,
-      });
-  
-      alert("User registered successfully 🎉");
-  
-      // 👉 Optionally: auto-login user after signup
-      // localStorage.setItem("token", res.data.token);
-      // navigate("/dashboard");
-  
-      navigate("/signin"); // redirect to login page
-    } catch (err) {
-      alert(err.response?.data?.msg || "Signup failed ❌");
-    }
-  };
-  
+  e.preventDefault();
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match ❌");
+    return;
+  }
+
+  try {
+    const res = await axios.post("http://localhost:5000/api/auth/signup", {
+      username: name,
+      email,
+      password,
+    });
+
+    // Debug log
+    console.log("Signup response:", res.data);
+
+    // ✅ Save token & user to localStorage
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+
+    alert("User registered & logged in 🎉");
+
+    // ✅ Redirect
+    navigate("/dashboard");
+
+  } catch (err) {
+    console.error("Signup error:", err.response?.data || err.message);
+    alert(err.response?.data?.msg || "Signup failed ❌");
+  }
+};
 
   return (
     <BackgroundBox>
@@ -86,6 +90,7 @@ export default function SignUp() {
         >
           Sign Up
         </Typography>
+
         <TextField
           label="Full Name"
           variant="outlined"
@@ -94,6 +99,7 @@ export default function SignUp() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
+
         <TextField
           label="Email"
           variant="outlined"
@@ -102,6 +108,7 @@ export default function SignUp() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+
         <TextField
           label="Password"
           type="password"
@@ -111,6 +118,7 @@ export default function SignUp() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
         <TextField
           label="Confirm Password"
           type="password"
@@ -120,6 +128,7 @@ export default function SignUp() {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
+
         <Button
           type="submit"
           variant="contained"

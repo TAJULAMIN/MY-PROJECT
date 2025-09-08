@@ -96,57 +96,71 @@ export default function BookTable() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // Validate all fields
-    const validationErrors = {
-      name: formData.name
-        ? formData.name.length > 50
-          ? 'Name should not exceed 50 characters.'
-          : ''
-        : 'Name is required.',
-      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-        ? ''
-        : 'Invalid email address.',
-      date: formData.date >= new Date().toISOString().split('T')[0]
-        ? ''
-        : 'Date cannot be in the past.',
-      time: formData.time ? '' : 'Time is required.',
-      guests:
-        formData.guests >= 1 && formData.guests <= 20
-          ? ''
-          : 'Guests should be between 1 and 20.',
-      branch: formData.branch ? '' : 'Please select a branch.',
-    };
+  // Validate all fields
+  const validationErrors = {
+    name: formData.name
+      ? formData.name.length > 50
+        ? "Name should not exceed 50 characters."
+        : ""
+      : "Name is required.",
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+      ? ""
+      : "Invalid email address.",
+    date: formData.date >= new Date().toISOString().split("T")[0]
+      ? ""
+      : "Date cannot be in the past.",
+    time: formData.time ? "" : "Time is required.",
+    guests:
+      formData.guests >= 1 && formData.guests <= 20
+        ? ""
+        : "Guests should be between 1 and 20.",
+    branch: formData.branch ? "" : "Please select a branch.",
+  };
 
-    if (Object.values(validationErrors).some((error) => error)) {
-      setErrors(validationErrors);
+  if (Object.values(validationErrors).some((error) => error)) {
+    setErrors(validationErrors);
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You must be logged in to book a table.");
       return;
     }
 
-    try {
-      const payload = {
-        name: formData.name,
-        email: formData.email,
-        date: new Date(formData.date), // convert to Date object
-        time: formData.time,
-        guests: Number(formData.guests), // convert to number
-        branch: formData.branch,
-      };
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      date: new Date(formData.date),
+      time: formData.time,
+      guests: Number(formData.guests),
+      branch: formData.branch,
+    };
 
-      const response = await axios.post('http://localhost:5000/api/book-table', payload);
+    const response = await axios.post(
+      "http://localhost:5000/api/book-table",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ fix added
+        },
+      }
+    );
 
-      toast.success('Table booked successfully!');
-      setFormData({ name: '', email: '', date: '', time: '', guests: '', branch: '' });
-      setErrors({});
-      console.log('Booking response:', response.data);
-    } catch (error) {
-      console.error('Error booking the table:', error.response || error);
-      toast.error(
-        error.response?.data?.error || 'Error booking the table. Please try again.'
-      );
-    }
-  };
+    toast.success("Table booked successfully!");
+    setFormData({ name: "", email: "", date: "", time: "", guests: "", branch: "" });
+    setErrors({});
+    console.log("Booking response:", response.data);
+  } catch (error) {
+    console.error("Error booking the table:", error.response || error);
+    toast.error(
+      error.response?.data?.error || "Error booking the table. Please try again."
+    );
+  }
+};
 
   return (
     <>
