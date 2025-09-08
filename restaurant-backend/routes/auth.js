@@ -9,20 +9,37 @@ const router = express.Router();
 
 
 
-// Sign Up
+// Sign Up with JWT and optional role
 router.post("/signup", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body; // include role
 
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ msg: "User already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({ username, email, password: hashedPassword });
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      role: role || "user" // default role is "user"
+    });
+
     await newUser.save();
 
-    res.json({ msg: "User registered successfully" });
+    // Generate JWT immediately
+    const token = jwt.sign(
+      { id: newUser._id, role: newUser.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({
+      msg: "User registered successfully",
+      token,
+      user: { id: newUser._id, username, email, role: newUser.role }
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -39,9 +56,17 @@ router.post("/signin", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+  { id: user._id, role: user.role }, // include role
+  process.env.JWT_SECRET,
+  { expiresIn: "1h" }
+);
 
-    res.json({ token, user: { id: user._id, username: user.username, email: user.email } });
+res.json({ 
+  token, 
+  user: { id: user._id, username: user.username, email: user.email, role: user.role } 
+});
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

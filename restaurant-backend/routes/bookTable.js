@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const TableBooking = require("../models/TableBooking");
 
+
 /**
  * =========================
  * USER ROUTES
@@ -48,21 +49,11 @@ router.get("/user/:userId", async (req, res) => {
  * =========================
  */
 
-// GET - Fetch all reservations (Admin only)
-router.get("/admin/reservations", async (req, res) => {
-  const userEmail = req.query.email; // ?email=admin@gmail.com
+const { verifyToken, verifyAdmin } = require("../middleware/auth");
 
-  if (userEmail !== "admin@gmail.com") {
-    return res.status(403).json({ message: "Access denied" });
-  }
-
-  try {
-    const reservations = await TableBooking.find();
-    res.json(reservations);
-  } catch (err) {
-    console.error("Error fetching all reservations:", err);
-    res.status(500).json({ message: "Server error" });
-  }
+router.get("/admin/reservations", verifyToken, verifyAdmin, async (req, res) => {
+  const bookings = await TableBooking.find();
+  res.json(bookings);
 });
 
 module.exports = router;

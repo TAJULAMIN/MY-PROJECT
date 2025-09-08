@@ -60,6 +60,8 @@ export default function SignIn() {
 
       // Save JWT token
       localStorage.setItem("token", res.data.token);
+      console.log(localStorage.getItem("token"));
+
 
       // ✅ Update global auth state
       login();

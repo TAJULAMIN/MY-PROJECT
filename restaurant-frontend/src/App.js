@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 import Header from './components/Header';
 import Home from './components/Home';
 import Menu from './components/Menu';
@@ -10,6 +11,7 @@ import SignUp from './pages/SignUp';
 import { AuthProvider } from "./Context/AuthContext"; 
 import TableBookingList from './Data/TableBookingList';
 import EditBooking from "./pages/EditBooking";
+
 const App = () => {
     return (
         <AuthProvider>
@@ -25,8 +27,6 @@ const App = () => {
                 <Route path="/SignUp" element={<SignUp />} />
                 <Route path="/my-bookings" element={<TableBookingList />} />
                 <Route path="/edit-booking/:id" element={<EditBooking />} />
-                
-                
         </Routes>
       </Router>
 

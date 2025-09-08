@@ -17,6 +17,10 @@ const bookTableRoutes = require('./routes/bookTable');
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
+
+app.use("/api/bookings", bookTableRoutes);
+
+
 // Fetch data
 async function fetchBookings() {
   const bookings = await TableBooking.find();
