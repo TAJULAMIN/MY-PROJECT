@@ -47,31 +47,24 @@ export default function SignIn() {
   const { login } = useAuth(); // ✅ get login function from AuthContext
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // 👇 call backend API
-      const res = await axios.post("http://localhost:5000/api/auth/signin", {
-        email,
-        password,
-      });
-        // ✅ Save logged in user in localStorage
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post("http://localhost:5000/api/auth/signin", {
+      email,
+      password,
+    });
 
-      // Save JWT token
-      localStorage.setItem("token", res.data.token);
-      console.log(localStorage.getItem("token"));
+    // ✅ Pass both user and token to AuthContext
+    login(res.data.user, res.data.token);
 
+    alert("Login Successful 🎉");
+    navigate("/"); // redirect after login
+  } catch (err) {
+    alert(err.response?.data?.msg || "Login failed");
+  }
+};
 
-      // ✅ Update global auth state
-      login();
-
-      alert("Login Successful 🎉");
-      navigate("/"); // redirect after login
-    } catch (err) {
-      alert(err.response?.data?.msg || "Login failed");
-    }
-  };
 
   return (
     <BackgroundBox>

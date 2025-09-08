@@ -71,7 +71,7 @@ export default function SignUp() {
     alert("User registered & logged in 🎉");
 
     // ✅ Redirect
-    navigate("/dashboard");
+    navigate("/");
 
   } catch (err) {
     console.error("Signup error:", err.response?.data || err.message);
