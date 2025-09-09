@@ -43,6 +43,9 @@ router.get("/user/:userId", async (req, res) => {
   }
 });
 
+
+
+
 /**
  * =========================
  * ADMIN ROUTES
@@ -54,6 +57,22 @@ const { verifyToken, verifyAdmin } = require("../middleware/auth");
 router.get("/admin/reservations", verifyToken, verifyAdmin, async (req, res) => {
   const bookings = await TableBooking.find();
   res.json(bookings);
+});
+
+// DELETE - Remove a booking (Admin only)
+router.delete("/:id", verifyToken, verifyAdmin, async (req, res) => {
+  try {
+    const booking = await TableBooking.findByIdAndDelete(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.json({ message: "Booking deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting booking:", err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 module.exports = router;
