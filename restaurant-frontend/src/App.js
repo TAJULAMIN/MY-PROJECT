@@ -11,6 +11,10 @@ import SignUp from './pages/SignUp';
 import { AuthProvider } from "./Context/AuthContext"; 
 import TableBookingList from './Data/TableBookingList';
 import EditBooking from "./pages/EditBooking";
+import AddItemPage from "./pages/AddItemPage";
+import ManageSection from './pages/ManageSection'
+
+
 
 const App = () => {
     return (
@@ -26,7 +30,10 @@ const App = () => {
                 <Route path="/SignIn" element={<SignIn />} />
                 <Route path="/SignUp" element={<SignUp />} />
                 <Route path="/my-bookings" element={<TableBookingList />} />
-                <Route path="/edit-booking/:id" element={<EditBooking />} />
+                <Route path="/edit-booking/:id" element={<EditBooking />} /> 
+                <Route path="/add-item/:sectionId" element={<AddItemPage />} />
+                <Route path="/manage-sections" element={<ManageSection />} />
+
         </Routes>
       </Router>
 

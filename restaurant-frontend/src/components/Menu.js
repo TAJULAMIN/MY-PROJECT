@@ -80,13 +80,25 @@ const MenuPage = () => {
     fetchMenu();
   }, []);
 
-  const handleDeleteItem = (sectionIndex, itemIndex) => {
+  const handleDeleteItem = async (sectionIndex, itemIndex) => {
+  try {
+    const section = menuSections[sectionIndex];
+    const itemId = section.items[itemIndex]._id;
+
+    // Call backend to delete this item
+    await axios.delete(`http://localhost:5000/api/menu/${section._id}/items/${itemId}`);
+
+    // Update frontend state
     setMenuSections((prev) => {
       const updated = [...prev];
       updated[sectionIndex].items.splice(itemIndex, 1);
       return updated;
     });
-  };
+  } catch (err) {
+    console.error("Failed to delete item:", err);
+  }
+};
+
 
   const handleAddItem = (sectionIndex) => {
     const sectionId = menuSections[sectionIndex]._id;
@@ -154,10 +166,48 @@ const MenuPage = () => {
   </Grid>
 )}
 
+
+
           </Grid>
+
+          
         </div>
+        
       ))}
+{isAdmin && (
+  <div>
+    <SectionTitle>Sections</SectionTitle>
+
+    <Grid container spacing={2}>
+      {/* Single Manage Section Card */}
+      <Grid item xs={12} sm={6} md={3}>
+        <MenuColumn
+          sx={{
+            cursor: "pointer",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: 200,
+          }}
+          onClick={() => navigate("/manage-sections")}
+        >
+          <Typography variant="h6" color="#4caf50">
+            Manage Sections
+          </Typography>
+          <Typography variant="body2" color="#555" sx={{ textAlign: "center", marginTop: 1 }}>
+            Add new sections or delete existing ones
+          </Typography>
+        </MenuColumn>
+      </Grid>
+    </Grid>
+  </div>
+)}
+
+
+      
     </StyledContainer>
+    
   );
 };
 

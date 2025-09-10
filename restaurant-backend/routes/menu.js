@@ -23,44 +23,50 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Add a new item to a section
-router.post("/:id/items", async (req, res) => {
-  try {
-    const section = await Menu.findById(req.params.id);
-    if (!section) return res.status(404).json({ error: "Menu section not found" });
-
-    section.items.push(req.body); // { name, price, image }
-    await section.save();
-    res.status(201).json(section);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to add item" });
-  }
-});
-
-
-// Update section by ID
-router.put("/:id", async (req, res) => {
-  try {
-    const updated = await Menu.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!updated) return res.status(404).json({ error: "Menu not found" });
-    res.json(updated);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to update menu" });
-  }
-});
-
-// Delete section by ID
+// Delete a section by ID
+// --------------------
 router.delete("/:id", async (req, res) => {
   try {
-    const deleted = await Menu.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ error: "Menu not found" });
-    res.json({ message: "Menu deleted successfully" });
+    const deletedSection = await Menu.findByIdAndDelete(req.params.id);
+
+    if (!deletedSection) {
+      return res.status(404).json({ error: "Section not found" });
+    }
+
+    res.json({ message: "Section deleted successfully" });
   } catch (err) {
-    res.status(500).json({ error: "Failed to delete menu" });
+    console.error("Error deleting section:", err);
+    res.status(500).json({ error: "Failed to delete section" });
   }
 });
+
+
+// Add a new item to a section
+router.post("/:id/items", async (req, res) => {
+  const section = await Menu.findById(req.params.id);
+  section.items.push(req.body);
+  await section.save();
+});
+
+
+
+
+// Delete item in a section
+router.delete("/:sectionId/items/:itemId", async (req, res) => {
+  try {
+    const { sectionId, itemId } = req.params;
+    const section = await Menu.findById(sectionId);
+    if (!section) return res.status(404).json({ error: "Menu section not found" });
+
+    // Remove the item from the array
+    section.items = section.items.filter(item => item._id.toString() !== itemId);
+    await section.save();
+
+    res.json({ message: "Item deleted successfully", section });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete item" });
+  }
+});
+
 
 module.exports = router;
