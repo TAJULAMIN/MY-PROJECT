@@ -2,12 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
 const router = express.Router();
-
-
-
-
 
 // Sign Up with JWT and optional role
 router.post("/signup", async (req, res) => {

@@ -42,22 +42,17 @@ router.get("/user/:userId", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-
-
-
-
 /**
  * =========================
  * ADMIN ROUTES
  * =========================
  */
-
 const { verifyToken, verifyAdmin } = require("../middleware/auth");
-
 router.get("/admin/reservations", verifyToken, verifyAdmin, async (req, res) => {
   const bookings = await TableBooking.find();
   res.json(bookings);
 });
+
 
 // DELETE - Remove a booking (Admin only)
 router.delete("/:id", verifyToken, verifyAdmin, async (req, res) => {
