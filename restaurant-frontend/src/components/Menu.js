@@ -6,7 +6,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 import { LocalDining, Fastfood, Cake, LocalBar } from '@mui/icons-material';
+import { toast, ToastContainer } from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.css";
 const StyledContainer = styled(Container)({
   padding: "32px",
   backgroundColor: "#fff8f0",
@@ -80,23 +82,63 @@ const MenuPage = () => {
     fetchMenu();
   }, []);
 
-  const handleDeleteItem = async (sectionIndex, itemIndex) => {
-  try {
-    const section = menuSections[sectionIndex];
-    const itemId = section.items[itemIndex]._id;
+// Delete item with toast confirmation
+const handleDeleteItem = (sectionIndex, itemIndex) => {
+  const section = menuSections[sectionIndex];
+  const item = section.items[itemIndex];
 
-    // Call backend to delete this item
-    await axios.delete(`http://localhost:5000/api/menu/${section._id}/items/${itemId}`);
+  toast(
+    ({ closeToast }) => (
+      <div>
+        <p>Are you sure you want to delete the item "{item.name}"?</p>
+        <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#FF5722",
+              color: "white",
+              "&:hover": { backgroundColor: "#E64A19" },
+            }}
+            onClick={async () => {
+              try {
+                // Call backend to delete the item
+                await axios.delete(
+                  `http://localhost:5000/api/menu/${section._id}/items/${item._id}`
+                );
 
-    // Update frontend state
-    setMenuSections((prev) => {
-      const updated = [...prev];
-      updated[sectionIndex].items.splice(itemIndex, 1);
-      return updated;
-    });
-  } catch (err) {
-    console.error("Failed to delete item:", err);
-  }
+                // Update frontend state
+                setMenuSections((prev) => {
+                  const updated = [...prev];
+                  updated[sectionIndex].items.splice(itemIndex, 1);
+                  return updated;
+                });
+
+                toast.success("Item deleted successfully!");
+                closeToast();
+              } catch (err) {
+                console.error("Failed to delete item:", err);
+                toast.error("Failed to delete item");
+              }
+            }}
+          >
+            Yes, Delete
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{
+              color: "#FF5722",
+              borderColor: "#FF5722",
+              "&:hover": { borderColor: "#E64A19", color: "#E64A19" },
+            }}
+            onClick={closeToast}
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
+    ),
+    { autoClose: false }
+  );
 };
 
 
@@ -205,7 +247,7 @@ const MenuPage = () => {
 )}
 
 
-      
+       <ToastContainer />
     </StyledContainer>
     
   );
