@@ -116,7 +116,7 @@ console.log("isAdmin:", user?.role?.toLowerCase() === "admin");
             <ListItemText primary="Book a Table" />
           </ListItem>
           {user.role === "admin" && (
-            <ListItem button component={Link} to="/my-bookings" onClick={handleDrawerToggle}>
+            <ListItem sx={{ color: '#FFA500' }} button component={Link} to="/my-bookings" onClick={handleDrawerToggle}>
               <ListItemText primary="My Bookings" />
             </ListItem>
           )}
@@ -130,10 +130,10 @@ console.log("isAdmin:", user?.role?.toLowerCase() === "admin");
       <>
         <Typography variant="body1" sx={{ mb: 2 }}>Not signed in</Typography>
         <List sx={{ width: '100%' }}>
-          <ListItem button component={Link} to="/signin" onClick={handleDrawerToggle}>
+          <ListItem sx={{ color: '#FFA500' }} button component={Link} to="/signin" onClick={handleDrawerToggle}>
             <ListItemText primary="Sign In" />
           </ListItem>
-          <ListItem button component={Link} to="/signup" onClick={handleDrawerToggle}>
+          <ListItem sx={{ color: '#FFA500' }} button component={Link} to="/signup" onClick={handleDrawerToggle}>
             <ListItemText primary="Sign Up" />
           </ListItem>
         </List>

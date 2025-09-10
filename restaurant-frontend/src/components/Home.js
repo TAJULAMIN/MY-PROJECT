@@ -169,7 +169,7 @@ const Home = () => {
                                         <img src={require(`../assets/dish${index}.jpg`)} alt={`Dish ${index}`} style={{ width: '100%', borderRadius: '8px' }} />
                                         <Typography variant="h6" sx={{ mt: 2 }}>Dish Name {index}</Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>Description of Dish {index}</Typography>
-                                        <Typography variant="subtitle1" sx={{ mt: 1 }}>${index * 10 + 15}.00</Typography>
+                                        <Typography variant="subtitle1" sx={{ mt: 1 }}>RS:{index * 200+50}.00</Typography>
                                     </DishPaper>
                                 </ScrollTrigger>
                             </Grid>
