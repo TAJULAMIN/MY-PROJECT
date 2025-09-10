@@ -4,7 +4,9 @@ import { styled } from "@mui/material/styles";
 import additem from "../assets/additem.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/AuthContext";
 import { LocalDining, Fastfood, Cake, LocalBar } from '@mui/icons-material';
+
 const StyledContainer = styled(Container)({
   padding: "32px",
   backgroundColor: "#fff8f0",
@@ -50,9 +52,19 @@ const IconWrapper = styled(IconButton)({
   fontSize: "2rem",
 });
 
+
+
+
 const MenuPage = () => {
   const [menuSections, setMenuSections] = useState([]);
   const navigate = useNavigate();
+
+
+// ✅ Auth and admin check
+  const { user } = useAuth();
+  const isAdmin = user?.role?.toLowerCase() === "admin";
+
+  
 
   // ✅ Fetch menu from MongoDB
   useEffect(() => {
@@ -100,42 +112,48 @@ const MenuPage = () => {
         {IconComponent && <IconWrapper><IconComponent /></IconWrapper>}
         <Typography variant="h6">{item.name}</Typography>
         <Typography variant="body1" color="textSecondary">{item.price}</Typography>
-        <Button
-          size="small"
-          color="error"
-          onClick={() => handleDeleteItem(sectionIndex, itemIndex)}
-          style={{ marginTop: "10px" }}
-        >
-          Delete
-        </Button>
+        {isAdmin && (
+  <Button
+    size="small"
+    color="error"
+    onClick={() => handleDeleteItem(sectionIndex, itemIndex)}
+    style={{ marginTop: "10px" }}
+  >
+    Delete
+  </Button>
+)}
+
       </MenuColumn>
     </Grid>
   );
 })}
 
 
-            <Grid item xs={12} sm={6} md={3}>
-              <MenuColumn
-                onClick={() => handleAddItem(sectionIndex)}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  cursor: "pointer",
-                  minHeight: "300px",
-                }}
-              >
-                <img
-                  src={additem}
-                  alt="additem"
-                  style={{ width: "60px", height: "60px", marginBottom: "10px" }}
-                />
-                <Typography variant="h6" style={{ marginTop: "8px", color: "#333" }}>
-                  Add Item
-                </Typography>
-              </MenuColumn>
-            </Grid>
+            {isAdmin && (
+  <Grid item xs={12} sm={6} md={3}>
+    <MenuColumn
+      onClick={() => handleAddItem(sectionIndex)}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "pointer",
+        minHeight: "300px",
+      }}
+    >
+      <img
+        src={additem}
+        alt="additem"
+        style={{ width: "60px", height: "60px", marginBottom: "10px" }}
+      />
+      <Typography variant="h6" style={{ marginTop: "8px", color: "#333" }}>
+        Add Item
+      </Typography>
+    </MenuColumn>
+  </Grid>
+)}
+
           </Grid>
         </div>
       ))}
