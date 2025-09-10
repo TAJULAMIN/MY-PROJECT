@@ -4,6 +4,9 @@ import { styled } from "@mui/material/styles";
 import { keyframes } from "@emotion/react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../Context/AuthContext"; // ✅ import AuthContext
 
 // Slide-in animation
 const slideIn = keyframes`
@@ -44,13 +47,14 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { login } = useAuth(); // ✅ get login function from context
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (password !== confirmPassword) {
-    alert("Passwords do not match ❌");
+    toast.error("Passwords do not match ❌");
     return;
   }
 
@@ -61,26 +65,34 @@ export default function SignUp() {
       password,
     });
 
-    // Debug log
-    console.log("Signup response:", res.data);
-
-    // ✅ Save token & user to localStorage
+    // Save token & user
     localStorage.setItem("token", res.data.token);
     localStorage.setItem("user", JSON.stringify(res.data.user));
 
-    alert("User registered & logged in 🎉");
-
-    // ✅ Redirect
-    navigate("/");
+    // Show auto-close toast
+    toast.success("User registered & logged in 🎉", {
+      position: "top-right",
+      autoClose: 3000, // closes after 3 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  // ✅ Update global AuthContext
+      login(res.data.user, res.data.token);
+    // Redirect after a short delay so toast is visible
+    setTimeout(() => navigate("/"), 1500);
 
   } catch (err) {
     console.error("Signup error:", err.response?.data || err.message);
-    alert(err.response?.data?.msg || "Signup failed ❌");
+    toast.error(err.response?.data?.msg || "Signup failed ❌");
   }
 };
 
   return (
     <BackgroundBox>
+      <ToastContainer position="top-right" />
       <FormContainer component="form" onSubmit={handleSubmit}>
         <Typography
           variant="h4"

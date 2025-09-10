@@ -5,6 +5,9 @@ import { keyframes } from "@emotion/react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../Context/AuthContext";  // ✅ use global auth
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 // Slide-in animation
 const slideIn = keyframes`
@@ -49,25 +52,57 @@ export default function SignIn() {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-  try {
-    const res = await axios.post("http://localhost:5000/api/auth/signin", {
-      email,
-      password,
-    });
-
-    // ✅ Pass both user and token to AuthContext
-    login(res.data.user, res.data.token);
-
-    alert("Login Successful 🎉");
-    navigate("/"); // redirect after login
-  } catch (err) {
-    alert(err.response?.data?.msg || "Login failed");
-  }
+  toast(
+    ({ closeToast }) => (
+      <div>
+        <p>Attempt to sign in with email "{email}"?</p>
+        <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#FF5722",
+              color: "white",
+              "&:hover": { backgroundColor: "#E64A19" },
+            }}
+            onClick={async () => {
+              try {
+                const res = await axios.post(
+                  "http://localhost:5000/api/auth/signin",
+                  { email, password }
+                );
+                login(res.data.user, res.data.token);
+                toast.success("Login Successful 🎉");
+                navigate("/");
+                closeToast();
+              } catch (err) {
+                toast.error(err.response?.data?.msg || "Login failed");
+              }
+            }}
+          >
+            Yes, Sign In
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{
+              color: "#FF5722",
+              borderColor: "#FF5722",
+              "&:hover": { borderColor: "#E64A19", color: "#E64A19" },
+            }}
+            onClick={closeToast}
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
+    ),
+    { autoClose: false }
+  );
 };
-
 
   return (
     <BackgroundBox>
+      <ToastContainer position="top-right" />
+
       <FormContainer component="form" onSubmit={handleSubmit}>
         <Typography
           variant="h4"

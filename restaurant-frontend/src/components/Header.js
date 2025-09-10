@@ -3,30 +3,23 @@ import { Link } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemText, IconButton, Typography, AppBar, Toolbar, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Home';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import BookIcon from '@mui/icons-material/Book';
-import ContactMailIcon from '@mui/icons-material/ContactMail';
+
 import logo from '../assets/logo.jpg';
 import { useAuth } from "../Context/AuthContext";
+import { Avatar, Divider, Box } from '@mui/material';
 
-// Styled components (same as before)
+
+
 const StyledDrawer = styled(Drawer)(({ theme }) => ({
-  width: 240,
   '& .MuiDrawer-paper': {
-    width: 240,
+    width: 280,           // wider for profile info
+    padding: theme.spacing(3),
     backgroundColor: '#222',
     color: 'white',
-    padding: theme.spacing(2),
-    borderRadius: '16px 0 0 16px',
   },
 }));
 
-const StyledListItem = styled(ListItem)(({ theme }) => ({
-  color: '#FF5722',
-  '&:hover': { backgroundColor: '#555', color: '#FFEB3B' },
-  '& .MuiListItemText-primary': { fontSize: '1.1rem', fontWeight: 500 },
-}));
+
 
 const StyledLink = styled(Link)(({ theme }) => ({
   color: '#FFA500',
@@ -101,26 +94,54 @@ console.log("isAdmin:", user?.role?.toLowerCase() === "admin");
 
       {/* Drawer */}
       <StyledDrawer anchor="right" open={open} onClose={handleDrawerToggle}>
-        <List>
-          {[
-            { text: 'Home', icon: <HomeIcon />, path: '/' },
-            { text: 'Menu', icon: <RestaurantMenuIcon />, path: '/menu' },
-            { text: 'Book a Table', icon: <BookIcon />, path: '/book-table' },
-            { text: 'Contact', icon: <ContactMailIcon />, path: '/contact' }
-          ].map(({ text, icon, path }) => (
-            <StyledListItem button component={Link} to={path} onClick={handleDrawerToggle} key={text}>
-              {icon}
-              <ListItemText primary={text} />
-            </StyledListItem>
-          ))}
-          {isAdmin && (
-            <StyledListItem button component={Link} to="/my-bookings" onClick={handleDrawerToggle}>
-              <BookIcon />
+  <Box display="flex" flexDirection="column" alignItems="center">
+    {isAuthenticated ? (
+      <>
+        <Avatar sx={{ width: 80, height: 80, mb: 2 }}>
+          {user.username?.[0]?.toUpperCase() || 'U'}
+        </Avatar>
+        <Typography variant="h6">{user.username}</Typography>
+        <Typography variant="body2" color="#ccc">{user.email}</Typography>
+         
+        <Divider sx={{ width: '100%', my: 2, backgroundColor: '#555' }} />
+
+        <List sx={{ width: '100%' }}>
+          <ListItem sx={{ color: '#FFA500' }} button component={Link} to="/" onClick={handleDrawerToggle}>
+            <ListItemText primary="Home" />
+          </ListItem>
+          <ListItem  sx={{ color: '#FFA500' }} button component={Link} to="/menu" onClick={handleDrawerToggle}>
+            <ListItemText primary="Menu" />
+          </ListItem>
+          <ListItem  sx={{ color: '#FFA500' }} button component={Link} to="/book-table" onClick={handleDrawerToggle}>
+            <ListItemText primary="Book a Table" />
+          </ListItem>
+          {user.role === "admin" && (
+            <ListItem button component={Link} to="/my-bookings" onClick={handleDrawerToggle}>
               <ListItemText primary="My Bookings" />
-            </StyledListItem>
+            </ListItem>
           )}
         </List>
-      </StyledDrawer>
+
+        <StyledButton sx={{ color: '#ff0000ff' }} fullWidth onClick={logout}>
+          Logout
+        </StyledButton>
+      </>
+    ) : (
+      <>
+        <Typography variant="body1" sx={{ mb: 2 }}>Not signed in</Typography>
+        <List sx={{ width: '100%' }}>
+          <ListItem button component={Link} to="/signin" onClick={handleDrawerToggle}>
+            <ListItemText primary="Sign In" />
+          </ListItem>
+          <ListItem button component={Link} to="/signup" onClick={handleDrawerToggle}>
+            <ListItemText primary="Sign Up" />
+          </ListItem>
+        </List>
+      </>
+    )}
+  </Box>
+</StyledDrawer>
+
     </>
   );
 };
