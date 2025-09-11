@@ -60,6 +60,10 @@ if (!token) {
             <Avatar sx={{ bgcolor: "#FF5722", mb: 1 }}>
               {fb.userId?.username ? fb.userId.username[0] : "U"}
             </Avatar>
+            <Typography variant="subtitle2" sx={{ color: "#FFEB3B" }}>
+              - {fb.userId?.username || "Unknown"}
+            </Typography>
+            
             <Typography variant="body1" sx={{ fontStyle: "italic", mb: 1 }}>
               "{fb.comment}"
             </Typography>
@@ -68,9 +72,7 @@ if (!token) {
                 <Star key={i} sx={{ color: "#FFEB3B" }} />
               ))}
             </Box>
-            <Typography variant="subtitle2" sx={{ color: "#FFEB3B" }}>
-              - {fb.userId?.username || "Unknown"}
-            </Typography>
+            
           </Paper>
         ))}
 
