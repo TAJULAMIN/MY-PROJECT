@@ -47,10 +47,7 @@ const Header = () => {
 console.log("AuthContext user:", user); // ✅ logs user after login
   const handleDrawerToggle = () => setOpen(!open);
 
-  // ✅ Admin check
-  const isAdmin = user?.role?.toLowerCase() === "admin";
- console.log("Header sees user:", user); // ✅ should print the admin object
-console.log("isAdmin:", user?.role?.toLowerCase() === "admin");
+
 
   return (
     <>
@@ -72,20 +69,22 @@ console.log("isAdmin:", user?.role?.toLowerCase() === "admin");
           {/* Conditional auth links */}
           {!isAuthenticated ? (
             <>
-              <StyledLink to="/signin">Sign In</StyledLink>
-              <StyledLink to="/signup">Sign Up</StyledLink>
+              <StyledLink to="/SignIn">Sign In</StyledLink>
+              <StyledLink to="/SignUp">Sign Up</StyledLink>
             </>
           ) : (
             <>
-              {isAdmin && (
-                <StyledButton component={Link} to="/my-bookings">
-                  My Bookings
-                </StyledButton>
-              )}
-              <StyledButton onClick={logout}>Logout</StyledButton>
-            </>
-          )}
+              {isAuthenticated && (
+  <>
+    <StyledLink to="/my-bookings">
+  My Bookings
+</StyledLink>
 
+    <StyledButton onClick={logout}>Logout</StyledButton>
+  </>
+)}
+          </>
+          )}
           <IconButton edge="end" color="inherit" onClick={handleDrawerToggle}>
             <MenuIcon />
           </IconButton>
@@ -115,10 +114,10 @@ console.log("isAdmin:", user?.role?.toLowerCase() === "admin");
           <ListItem  sx={{ color: '#FFA500' }} button component={Link} to="/book-table" onClick={handleDrawerToggle}>
             <ListItemText primary="Book a Table" />
           </ListItem>
-          {user.role === "admin" && (
-            <ListItem sx={{ color: '#FFA500' }} button component={Link} to="/my-bookings" onClick={handleDrawerToggle}>
-              <ListItemText primary="My Bookings" />
-            </ListItem>
+          {isAuthenticated && (
+    <ListItem sx={{ color: '#FFA500' }} button component={Link} to="/my-bookings" onClick={handleDrawerToggle}>
+      <ListItemText primary="My Bookings" />
+    </ListItem>
           )}
         </List>
 

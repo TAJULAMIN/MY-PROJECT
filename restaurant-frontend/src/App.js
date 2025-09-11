@@ -9,7 +9,7 @@ import BookTable from './pages/BookTable';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import { AuthProvider } from "./Context/AuthContext"; 
-import TableBookingList from './Admin Dashboard/TableBookingList';
+import TableBookingList from './pages/TableBookingList';
 import EditBooking from "./pages/EditBooking";
 import AddItemPage from "./pages/AddItemPage";
 import ManageSection from './pages/ManageSection'

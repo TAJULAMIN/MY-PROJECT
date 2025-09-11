@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const TableBooking = require("../models/TableBooking");
-
+const { verifyToken, verifyAdmin } = require("../middleware/auth");
 
 /**
  * =========================
@@ -12,20 +12,35 @@ const TableBooking = require("../models/TableBooking");
 
 
 // POST - Book a table
-router.post("/", async (req, res) => {
+// POST - Book a table (attach userId automatically)
+router.post("/", verifyToken, async (req, res) => {
   try {
-    console.log("Incoming booking data:", req.body);
+    // Make sure req.user exists
+    console.log("Logged-in user:", req.user);
 
-    const newBooking = new TableBooking(req.body);
+    // Attach logged-in user ID
+    const bookingData = {
+      ...req.body,
+      userId: req.user.id || req.user._id, // Use the correct field from your JWT
+    };
+
+    console.log("Incoming booking data with userId:", bookingData);
+
+    // Create new booking with userId
+    const newBooking = new TableBooking(bookingData);
+
+    // Save to database
     const savedBooking = await newBooking.save();
-
     console.log("Booking saved successfully:", savedBooking);
+
+    // Send response
     res.status(201).json({ message: "Table booked!", booking: savedBooking });
   } catch (err) {
     console.error("Error saving booking:", err);
     res.status(400).json({ error: err.message, details: err.errors });
   }
 });
+
 
 // GET - Fetch reservations for a specific user
 router.get("/user/:userId", async (req, res) => {
@@ -47,7 +62,7 @@ router.get("/user/:userId", async (req, res) => {
  * ADMIN ROUTES
  * =========================
  */
-const { verifyToken, verifyAdmin } = require("../middleware/auth");
+
 router.get("/admin/reservations", verifyToken, verifyAdmin, async (req, res) => {
   const bookings = await TableBooking.find();
   res.json(bookings);
