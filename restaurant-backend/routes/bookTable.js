@@ -9,9 +9,6 @@ const { verifyToken, verifyAdmin } = require("../middleware/auth");
  * =========================
  */
 
-
-
-// POST - Book a table
 // POST - Book a table (attach userId automatically)
 router.post("/", verifyToken, async (req, res) => {
   try {
@@ -57,11 +54,7 @@ router.get("/user/:userId", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-/**
- * =========================
- * ADMIN ROUTES
- * =========================
- */
+
 
 router.get("/admin/reservations", verifyToken, verifyAdmin, async (req, res) => {
   const bookings = await TableBooking.find();
@@ -70,7 +63,7 @@ router.get("/admin/reservations", verifyToken, verifyAdmin, async (req, res) => 
 
 
 // DELETE - Remove a booking (Admin only)
-router.delete("/:id", verifyToken, verifyAdmin, async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const booking = await TableBooking.findByIdAndDelete(req.params.id);
 
