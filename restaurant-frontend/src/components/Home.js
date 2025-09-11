@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import { keyframes } from '@emotion/react';
 import ScrollTrigger from 'react-scroll-trigger';
 import { TableRestaurant, Star, RestaurantMenu, Fastfood } from '@mui/icons-material';
+import FeedbackSection from "./FeedbackSection";
 
 // Keyframes for animations
 const slideInLeft = keyframes`
@@ -46,17 +47,9 @@ const AnimatedPaper = styled(Paper)(({ theme }) => ({
     '&:hover': { transform: 'scale(1.05)', boxShadow: theme.shadows[10] },
 }));
 
-const SlidePaper = styled(Paper)(({ theme, trigger }) => ({
-    animation: trigger ? `${slideInLeft} 1s ease-out` : 'none',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-    '& img': { width: '100%', borderRadius: '8px' },
-    '&:hover': { transform: 'scale(1.05)', boxShadow: theme.shadows[10] }
-}));
-
 const Home = () => {
     const [scrolling, setScrolling] = useState(false);
     const [inView, setInView] = useState(false);
-    const [trigger, setTrigger] = useState(false);
     const [trigger1, setTrigger1] = useState(false);
     const [trigger2, setTrigger2] = useState(false);
 
@@ -177,37 +170,8 @@ const Home = () => {
                     </Grid>
                 </Container>
             </Box>
-
-            {/* Testimonials Section */}
-            <ScrollTrigger onEnter={() => setTrigger(true)} onExit={() => setTrigger(false)}>
-                <Box sx={{ py: 8, backgroundColor: '#212121', color: 'white' }}>
-                    <Container>
-                        <Typography variant="h4" sx={{ fontFamily: 'Cinzel, serif', fontWeight: 'bold', color: '#FFEB3B', textAlign: 'center', position: 'relative', mb: 4, '&:before': { content: '""', position: 'absolute', width: '60%', height: '4px', backgroundColor: '#FF5722', bottom: '-10px', left: '20%' } }}>
-                            What Our Customers Say
-                        </Typography>
-                        <Grid container spacing={4} justifyContent="center">
-                            <Grid item xs={12} sm={6} md={4}>
-                                <SlidePaper elevation={5} trigger={trigger}>
-                                    <img src={require('../assets/chef-special1.jpg')} alt="Chef's Special 1" />
-                                    <Box className="content" sx={{ p: 2 }}>
-                                        <Typography variant="body1" sx={{ fontStyle: 'italic', mb: 2 }}>"The best dining experience I've ever had! The food was incredible, with the service."</Typography>
-                                        <Typography variant="subtitle1">- Pizza</Typography>
-                                    </Box>
-                                </SlidePaper>
-                            </Grid>
-                            <Grid item xs={12} sm={6} md={4}>
-                                <SlidePaper elevation={5} trigger={trigger}>
-                                    <img src={require('../assets/chef-special2.jpg')} alt="Chef's Special 2" />
-                                    <Box className="content" sx={{ p: 2 }}>
-                                        <Typography variant="body1" sx={{ fontStyle: 'italic', mb: 2 }}>"A hidden gem in the city. The atmosphere is cozy, and the dishes are a culinary delight."</Typography>
-                                        <Typography variant="subtitle1">- Cake</Typography>
-                                    </Box>
-                                </SlidePaper>
-                            </Grid>
-                        </Grid>
-                    </Container>
-                </Box>
-            </ScrollTrigger>
+             {/* Feedback Section  */}
+            <FeedbackSection />
 
             {/* Events & Offers Section */}
             <Box sx={{ py: 8, backgroundColor: '#222', color: 'white' }}>
